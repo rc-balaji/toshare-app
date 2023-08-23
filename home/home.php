@@ -56,7 +56,7 @@ $result = mysqli_query($dbcon, $query);
             border: 2px solid black;
             align-items: center;
             width: 450px;
-            height: 430px;
+            height: 600;
             padding: 10px;
             border-radius: 8px;
         }
@@ -100,29 +100,43 @@ $result = mysqli_query($dbcon, $query);
     </style>
 </head>
 <body>
-    <div class="post-container">
+<div class="post-container">
         <h1>Recent Posts</h1>
         <?php
-       if ($result && mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            echo "<div class='posts' >";
-            echo "<div class='top' >";
-            echo "<h2>🙂{$row['username']}</h2>";
-            echo "<span class='time'>{$row['post_date']}</span>";
-            echo "</div>";
-            echo "<img class='img' src='../post_images/{$row['photo']}' alt='Post Image'><br>";
-            echo "<button class='btn'  onclick='likePost({$row['post_id']})' data-postid='{$row['post_id']}' data-action='like'>❤️ {$row['likes']}</button>";
-            echo "<button class='btn' onclick='dislikePost({$row['post_id']})' data-postid='{$row['post_id']}' data-action='dislike'>👎 {$row['dislikes']}</button>";
-            echo "<div class='cap'>";
-            echo "<p>{$row['username']} :</p>";
-            echo "<p>{$row['caption']}...</p>";
-            echo "</div>";
-            echo "</div>";
+        if ($result && mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<div class='posts'>";
+                echo "<div class='top'>";
+                echo "<h2>🙂{$row['username']}</h2>";
+                echo "<span class='time'>{$row['post_date']}</span>";
+                echo "</div>";
+                echo "<img class='img' src='../post_images/{$row['photo']}' alt='Post Image'><br>";
+                echo "<button class='btn' onclick='likePost({$row['post_id']})' data-postid='{$row['post_id']}' data-action='like'>❤️ {$row['likes']}</button>";
+                echo "<button class='btn' onclick='dislikePost({$row['post_id']})' data-postid='{$row['post_id']}' data-action='dislike'>👎 {$row['dislikes']}</button>";
+                echo "<div class='cap'>";
+                echo "<p>{$row['username']} :</p>";
+                echo "<p>{$row['caption']}...</p>";
+                echo "</div>";
+
+                // Display comments section
+                echo "<h4>Comments</h4>";
+                echo "<div class='comments' id='comments{$row['post_id']}'>";
+                echo "<input type='text' id='commentInput{$row['post_id']}' placeholder='Add a comment'>";
+                echo "<button class='btn' onclick='addComment({$row['post_id']}, {$_SESSION['uid']})'>Add Comment</button>";
+                
+                // Fetch comments using AJAX
+                echo "<div class='comments-list' id='commentsList{$row['post_id']}'>";
+                echo "</div>";
+                echo "</div>";
+
+                // Fetch comments using AJAX
+                echo "<script>getComments({$row['post_id']});</script>";
+
+                echo "</div>"; // Close the 'posts' div
+            }
+        } else {
+            echo "<p class='no-posts'>No posts available.</p>";
         }
-    } else {
-        echo "<p class='no-posts'>No posts available.</p>";
-    }
-    
         ?>
     </div>
 

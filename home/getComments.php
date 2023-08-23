@@ -10,7 +10,7 @@ if (isset($_GET['post_id'])) {
     if ($result && mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<div>";
-            echo "<p>{$row['username']}: {$row['comment']}</p>";
+            echo "<p>{$row['username']}: {$row['comment_text']}</p>";
             echo "</div>";
         }
     } else {
